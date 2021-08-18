@@ -1,0 +1,8 @@
+﻿- SizeToContent="WidthANdHeight" 
+The Size of the window will depend on the size of the content
+
+- ClipToBounds="True" 
+The controls will not expand beyond the boundaries of the canvas panel 
+
+- ContentRendered 
+Helps in drawing components as soon as all controls are inside the Window

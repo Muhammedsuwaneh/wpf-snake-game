@@ -1,0 +1,49 @@
+﻿<Window x:Class="SnakeGame.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SnakeGame"
+        mc:Ignorable="d"
+        KeyDown="Window_KeyDown"
+        Title="Snake - Score: 0" 
+        Icon="Resources/SnakeGameIcon.png"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        ContentRendered="Window_ContentRendered">
+    
+    <!--- Window Commands -->
+    <Window.CommandBindings>
+        <CommandBinding x:Name="PlayGameCommand" Command="{x:Static local:MainWindow.PlayCommand}" CanExecute="PlayGameCommand_CanExecute" Executed="PlayGameCommand_Executed" />
+        <CommandBinding x:Name="PauseGameCommand" Command="{x:Static local:MainWindow.PauseCommand}" CanExecute="PauseGameCommand_CanExecute" Executed="PauseGameCommand_Executed"/>
+        <CommandBinding x:Name="ContinueGameCommand" Command="{x:Static local:MainWindow.ContinueCommand}" CanExecute="ContinueGameCommand_CanExecute"  Executed="ContinueGameCommand_Executed"/>
+        <CommandBinding x:Name="ResetGameCommand" Command="{x:Static local:MainWindow.ResetCommand}" CanExecute="ResetGameCommand_CanExecute"  Executed="ResetGameCommand_Executed"/>
+        <CommandBinding x:Name="ExitGameCommand" Command="{x:Static local:MainWindow.ExitCommand}" CanExecute="ExitGameCommand_CanExecute"  Executed="ExitGameCommand_Executed"/>
+    </Window.CommandBindings>
+    
+    <!--- Game Window -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="_Game">
+                <MenuItem Header="_Play Game" x:Name="PlayGame" Click="PlayGame_Click" InputGestureText="Ctrl+G"></MenuItem>
+                <MenuItem x:Name="PauseGame" Header="_Pause" Click="PauseGame_Click" InputGestureText="Ctrl+P"></MenuItem>
+                <MenuItem x:Name="ContinueGame" Header="_Continue" Click="ContinueGame_Click" InputGestureText="Alt+C"></MenuItem>
+                <MenuItem x:Name="ResetGame" Header="_Reset" Click="ResetGame_Click" InputGestureText="Ctrl+R"></MenuItem>
+                <MenuItem x:Name="ExitGame" Header="_Exit" Click="ExitGame_Click" InputGestureText="Ctrl+Q"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_Controls" InputGestureText="Ctrl + C"></MenuItem>
+                <MenuItem Header="_About" InputGestureText="Ctrl + A"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="5">
+            <Canvas x:Name="GameArea" ClipToBounds="True" Width="400" Height="400">
+            </Canvas>
+        </Border>
+    </Grid>
+</Window>
