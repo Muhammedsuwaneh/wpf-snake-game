@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:SnakeGame"
         mc:Ignorable="d"
         KeyDown="Window_KeyDown"
-        Title="Snake - Score: 0" 
+        Title="Snake" 
+        WindowStyle="None"
         Icon="Resources/SnakeGameIcon.png"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
@@ -24,24 +25,52 @@
     
     <!--- Game Window -->
     <Grid>
+
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0">
-            <MenuItem Header="_Game">
-                <MenuItem Header="_Play Game" x:Name="PlayGame" Click="PlayGame_Click" InputGestureText="Ctrl+G"></MenuItem>
-                <MenuItem x:Name="PauseGame" Header="_Pause" Click="PauseGame_Click" InputGestureText="Ctrl+P"></MenuItem>
-                <MenuItem x:Name="ContinueGame" Header="_Continue" Click="ContinueGame_Click" InputGestureText="Alt+C"></MenuItem>
-                <MenuItem x:Name="ResetGame" Header="_Reset" Click="ResetGame_Click" InputGestureText="Ctrl+R"></MenuItem>
-                <MenuItem x:Name="ExitGame" Header="_Exit" Click="ExitGame_Click" InputGestureText="Ctrl+Q"></MenuItem>
+
+        <Grid Grid.Row="0" DockPanel.Dock="Top" Background="Black">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontFamily" Value="Consolas" />
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="FontSize" Value="24" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </Style>
+            </Grid.Resources>
+
+            <WrapPanel Margin="10,0,0,0">
+                <TextBlock>Score:</TextBlock>
+                <TextBlock Name="tbStatusScore">0</TextBlock>
+            </WrapPanel>
+            <WrapPanel Grid.Column="1">
+                <TextBlock>Speed:</TextBlock>
+                <TextBlock Name="tbStatusSpeed">0</TextBlock>
+            </WrapPanel>
+            <Button Grid.Column="2" DockPanel.Dock="Right" Background="Transparent" Foreground="White" FontWeight="Bold" FontSize="20" BorderThickness="0" Name="btnClose" Click="btnClose_Click"  Padding="10,0">X</Button>
+        </Grid>
+        <Menu Grid.Row="1">
+                <MenuItem Header="_Game">
+                    <MenuItem Header="_Play Game" x:Name="PlayGame" Click="PlayGame_Click" InputGestureText="Ctrl+G"></MenuItem>
+                    <MenuItem x:Name="PauseGame" Header="_Pause" Click="PauseGame_Click" InputGestureText="Ctrl+P"></MenuItem>
+                    <MenuItem x:Name="ContinueGame" Header="_Continue" Click="ContinueGame_Click" InputGestureText="Alt+C"></MenuItem>
+                    <MenuItem x:Name="ResetGame" Header="_Reset" Click="ResetGame_Click" InputGestureText="Ctrl+R"></MenuItem>
+                    <MenuItem x:Name="ExitGame" Header="_Exit" Click="ExitGame_Click" InputGestureText="Ctrl+Q"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="_Help">
+                <MenuItem Header="_Controls" Click="MenuItem_Click"></MenuItem>
             </MenuItem>
-            <MenuItem Header="_Help">
-                <MenuItem Header="_Controls" InputGestureText="Ctrl + C"></MenuItem>
-                <MenuItem Header="_About" InputGestureText="Ctrl + A"></MenuItem>
-            </MenuItem>
-        </Menu>
-        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="5">
+            </Menu>
+        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="5">
             <Canvas x:Name="GameArea" ClipToBounds="True" Width="400" Height="400">
             </Canvas>
         </Border>

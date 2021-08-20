@@ -6,6 +6,7 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Windows.Threading;
 using System.Windows.Input;
+using System.Linq;
 
 namespace SnakeGame
 {
@@ -21,12 +22,12 @@ namespace SnakeGame
         /// <summary>
         ///  Colors the Snake's body
         /// </summary>
-        private SolidColorBrush snakeBodyBrush = Brushes.Green;
+        private SolidColorBrush snakeBodyBrush = Brushes.Gray;
 
         /// <summary>
         /// Colors the Snake's head 
         /// </summary>
-        private SolidColorBrush snakeHeadBrush = Brushes.YellowGreen;
+        private SolidColorBrush snakeHeadBrush = Brushes.Red;
 
         /// <summary>
         /// Keeps a reference to all snake parts
@@ -67,7 +68,21 @@ namespace SnakeGame
         /// </summary>
         private DispatcherTimer gameTickTimer = new DispatcherTimer();
 
+        /// <summary>
+        /// Indicates if the game playing
+        /// </summary>
         private bool IsPlaying { get; set; } = false;
+
+        /// <summary>
+        /// Gives the snake food it's next position
+        /// </summary>
+        private Random randomPosition = new Random();
+
+        private UIElement snakeFood = null;
+
+        private SolidColorBrush foodBrush = Brushes.AliceBlue;
+
+        private int currentScore = 0;
 
         #endregion
 
@@ -237,6 +252,8 @@ namespace SnakeGame
 
                     gameTickTimer.IsEnabled = false;
 
+                    IsPlaying = false;
+
                     ContinueGame.Visibility = Visibility.Visible;
 
                     PauseGame.Visibility = Visibility.Collapsed;
@@ -253,7 +270,7 @@ namespace SnakeGame
                     IsPlaying = true;
                     break;
                 case GameMenu.Reset:
-                    StartNewGame();
+                    ResetCurrentGame();
                     break;
                 case GameMenu.Exit:
                     var dialogResult = (System.Windows.Forms.DialogResult)MessageBox.Show("Are you sure ?", "Exit Game", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -275,6 +292,16 @@ namespace SnakeGame
         #region Game Controls 
 
         /// <summary>
+        /// Closes the window 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        /// <summary>
         /// Controls the movement of the snake 
         /// </summary>
         /// <param name="sender"></param>
@@ -286,20 +313,32 @@ namespace SnakeGame
                 switch (e.Key.ToString())
                 {
                     case "Up":
-                        snakeDirection = SnakeDirection.Up;
-                        MoveSnake();
+                        if(IsPlaying)
+                        {
+                            snakeDirection = SnakeDirection.Up;
+                            MoveSnake();
+                        }
                         break;
                     case "Down":
-                        snakeDirection = SnakeDirection.Down;
-                        MoveSnake();
+                        if(IsPlaying)
+                        {
+                            snakeDirection = SnakeDirection.Down;
+                            MoveSnake();
+                        }
                         break;
                     case "Left":
-                        snakeDirection = SnakeDirection.Left;
-                        MoveSnake();
+                        if(IsPlaying)
+                        {
+                            snakeDirection = SnakeDirection.Left;
+                            MoveSnake();
+                        }
                         break;
                     case "Right":
-                        snakeDirection = SnakeDirection.Right;
-                        MoveSnake();
+                        if (IsPlaying)
+                        {
+                            snakeDirection = SnakeDirection.Right;
+                            MoveSnake();
+                        }
                         break;
                 }
             }
@@ -326,6 +365,24 @@ namespace SnakeGame
         {
             if (!IsPlaying)
             {
+
+                // Remove potential dead snake parts and leftover food
+                foreach(SnakePart snakeBodyPart in snakeParts)
+                {
+                    if(snakeBodyPart.UiElement != null)
+                    {
+                        GameArea.Children.Remove(snakeBodyPart.UiElement);
+                    }
+                }
+
+                snakeParts.Clear();
+
+                if (snakeFood != null) GameArea.Children.Remove(snakeFood);
+
+
+                // reset 
+                currentScore = 0;
+
                 snakeLength = SnakeStartLength;
 
                 snakeDirection = SnakeDirection.Right;
@@ -341,6 +398,11 @@ namespace SnakeGame
                 // Draw snake 
                 DrawSnake();
 
+                // Draw snake's food
+                DrawSnakeFood();
+
+                UpdateGameStatus();
+
                 // Start Playing
                 gameTickTimer.IsEnabled = true;
 
@@ -350,9 +412,36 @@ namespace SnakeGame
             }
         }
 
+        /// <summary>
+        /// Resets Game 
+        /// </summary>
+        private void ResetCurrentGame()
+        {
+            // Remove potential dead snake parts and leftover food
+            foreach (SnakePart snakeBodyPart in snakeParts)
+            {
+                if (snakeBodyPart.UiElement != null)
+                {
+                    GameArea.Children.Remove(snakeBodyPart.UiElement);
+                }
+            }
+
+            snakeLength = SnakeSquareSize;
+
+            currentScore = 0;
+
+            snakeParts.Clear();
+
+            if (snakeFood != null) GameArea.Children.Remove(snakeFood);
+
+            gameTickTimer.IsEnabled = false;
+
+            IsPlaying = false;
+        }
+
         #endregion
 
-        #region Draw - Game Area and Snake
+        #region Drawing
         /// <summary>
         /// Calls the <see cref="DrawGameArea()"/> when all controls are inside th window
         /// </summary>
@@ -375,8 +464,6 @@ namespace SnakeGame
 
             int rowCounter = 0;
 
-            bool nextIsOdd = false;
-
             // Draws Black and White Rectangles
             while(!DoneDrawingBackground)
             {
@@ -385,7 +472,7 @@ namespace SnakeGame
                 {
                     Width = SnakeSquareSize,
                     Height = SnakeSquareSize,
-                    Fill = nextIsOdd ? Brushes.White : Brushes.Black
+                    Fill = Brushes.Blue,
                 };
 
                 // add rectangle to canvas 
@@ -397,9 +484,6 @@ namespace SnakeGame
                 // set current left position 
                 Canvas.SetLeft(rectangle, nextX);
 
-                // reverse odd 
-                nextIsOdd = !nextIsOdd;
-
                 // increase the x position - i.e next point on x-axis/Matrix row 
                 nextX += SnakeSquareSize;
 
@@ -409,7 +493,6 @@ namespace SnakeGame
                     nextX = 0;
                     nextY += SnakeSquareSize;
                     rowCounter++;
-                    nextIsOdd = (rowCounter % 2 != 0);
                 }
 
                 // finish drawing if the next row is greater or equals Game Area Height
@@ -443,6 +526,48 @@ namespace SnakeGame
                     Canvas.SetLeft(snakePart.UiElement, snakePart.Position.X);
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns the next random snake food position
+        /// </summary>
+        /// <returns>Snake food's position</returns>
+        private Point GetNextFoodPosition()
+        {
+            int maxX = (int)(GameArea.ActualWidth / SnakeSquareSize);
+            int maxY = (int)(GameArea.ActualHeight / SnakeSquareSize);
+            int foodX = randomPosition.Next(0, maxX) * SnakeSquareSize;
+            int foodY = randomPosition.Next(0, maxY) * SnakeSquareSize;
+
+            foreach(SnakePart snakePart in snakeParts)
+            {
+                if((snakePart.Position.X == foodX) && (snakePart.Position.Y == foodY))
+                {
+                    return GetNextFoodPosition();
+                }
+            }
+
+            return new Point(foodX, foodY);
+        }
+
+        /// <summary>
+        /// Draws the snake'S food
+        /// </summary>
+        private void DrawSnakeFood()
+        {
+            Point foodPosition = GetNextFoodPosition();
+
+            snakeFood = new Ellipse()
+            {
+                Width = SnakeSquareSize,
+                Height = SnakeSquareSize,
+                Fill = foodBrush
+            };
+
+            GameArea.Children.Add(snakeFood);
+
+            Canvas.SetTop(snakeFood, foodPosition.Y);
+            Canvas.SetLeft(snakeFood, foodPosition.X);
         }
 
         #endregion
@@ -508,9 +633,94 @@ namespace SnakeGame
             });
 
             DrawSnake();
-            //DoCollisionCheck();
+
+            DoCollisionCheck();
+        }
+
+        private void DoCollisionCheck()
+        {
+            SnakePart snakeHead = snakeParts[snakeParts.Count - 1];
+
+            // if snake eats the food
+            if((snakeHead.Position.X == Canvas.GetLeft(snakeFood)) &&
+                (snakeHead.Position.Y == Canvas.GetTop(snakeFood)))
+            {
+                EatSnakeFood();
+                return;
+            }
+
+            // if snake makes a collision with the walls
+            if((snakeHead.Position.Y < 0) || 
+                (snakeHead.Position.Y >= GameArea.ActualHeight) ||
+                (snakeHead.Position.X < 0) ||
+                (snakeHead.Position.X >= GameArea.ActualWidth))
+            {
+                EndGame();
+            }
+
+            // if snake eats itself/ snake head collides with the body
+            foreach(SnakePart snakeBodyPart in snakeParts.Take(snakeParts.Count - 1))
+            {
+                if((snakeHead.Position.X == snakeBodyPart.Position.X) &&
+                    (snakeHead.Position.Y == snakeBodyPart.Position.Y))
+                {
+                    EndGame();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Makes the snake eat the food and create another food 
+        /// </summary>
+        private void EatSnakeFood()
+        {
+            snakeLength++;
+            currentScore++;
+
+            // increase speed of game 
+            int timerInterval = Math.Max(SnakeSpeedThreshold, (int)gameTickTimer.Interval.TotalMilliseconds - (currentScore * 2));
+
+            gameTickTimer.Interval = TimeSpan.FromMilliseconds(timerInterval);
+
+            GameArea.Children.Remove(snakeFood);
+
+            DrawSnakeFood();
+
+            UpdateGameStatus();
+        }
+
+        /// <summary>
+        /// Ends a game when necessary
+        /// </summary>
+        private void EndGame()
+        {
+            gameTickTimer.IsEnabled = false;
+
+            PlayGame.IsEnabled = true;
+
+            PauseGame.Visibility = Visibility.Visible;
+
+            MessageBox.Show("Game Over. Ok to Start Over");
+
+            IsPlaying = false;
+
+            StartNewGame();
+        }
+
+        /// <summary>
+        /// Updates game status
+        /// </summary>
+        private void UpdateGameStatus()
+        {
+            this.tbStatusScore.Text = currentScore.ToString();
+            this.tbStatusSpeed.Text = gameTickTimer.Interval.TotalMilliseconds.ToString();
         }
 
         #endregion
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Arrow Up - Moves Snake Up\nArrow Down - Moves Snake Down\nLeft Arrow - Moves Snake Left\nRight Arrow - Moves Snake Left");
+        }
     }
 }
