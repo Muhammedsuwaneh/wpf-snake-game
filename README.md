@@ -1,6 +1,6 @@
 # WPF Snake Game
 
-**It is a simple snake game develop using wpf. The snake eats randomly
+It is a simple snake game develop using wpf. The snake eats randomly
 generated and it's size increases as it eats. The player's score as long as the snake 
 continues to eat the generated food. 
 
@@ -27,7 +27,7 @@ continues to eat the generated food.
 - Ctrl + R - Resets Game
 - Ctrl + Q - Quits Game 
 
-## Game Menu Bar items
+## Game Menubar items
 
 - Play Game
 - Pause
@@ -35,8 +35,9 @@ continues to eat the generated food.
 - Reset
 - Quit 
 
-## ScreenShots
+## Screenshots
 
-- Gameplay:
+Gameplay:
+
 ![Screenshot](Screenshots/gameplay.png)
 
