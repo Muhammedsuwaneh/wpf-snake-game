@@ -572,16 +572,27 @@ namespace SnakeGame
 
         #endregion
 
+        private SnakeDirection PreviousPosition = SnakeDirection.Right;
+
         #region Motion - Moving Snake 
         /// <summary>
         /// Moves the snake over the game area 
         /// </summary>
         private void MoveSnake()
         {
+            // avoid opposite movement conflicts
+            if ((PreviousPosition == SnakeDirection.Left && snakeDirection == SnakeDirection.Right)
+                 || (PreviousPosition == SnakeDirection.Right && snakeDirection == SnakeDirection.Left)
+                 || (PreviousPosition == SnakeDirection.Up && snakeDirection == SnakeDirection.Down)
+                 || (PreviousPosition == SnakeDirection.Down && snakeDirection == SnakeDirection.Up))
+            {
+                snakeDirection = PreviousPosition;
+            }
+
             /* Remove last part of the snake, in preparation of the new part
              * added below
             */
-            while(snakeParts.Count >= snakeLength)
+            while (snakeParts.Count >= snakeLength)
             {
                 GameArea.Children.Remove(snakeParts[0].UiElement);
                 snakeParts.RemoveAt(0);
@@ -635,6 +646,8 @@ namespace SnakeGame
             DrawSnake();
 
             DoCollisionCheck();
+
+            PreviousPosition = snakeDirection;
         }
 
         private void DoCollisionCheck()
@@ -721,6 +734,14 @@ namespace SnakeGame
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Arrow Up - Moves Snake Up\nArrow Down - Moves Snake Down\nLeft Arrow - Moves Snake Left\nRight Arrow - Moves Snake Left");
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
+            }
         }
     }
 }

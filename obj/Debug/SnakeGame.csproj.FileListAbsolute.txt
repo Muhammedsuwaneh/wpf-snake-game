@@ -13,3 +13,18 @@ E:\.Net\WPF\Projects\SnakeGame\obj\Debug\SnakeGame.csproj.GenerateResource.cache
 E:\.Net\WPF\Projects\SnakeGame\obj\Debug\SnakeGame.csproj.CoreCompileInputs.cache
 E:\.Net\WPF\Projects\SnakeGame\obj\Debug\SnakeGame.exe
 E:\.Net\WPF\Projects\SnakeGame\obj\Debug\SnakeGame.pdb
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\bin\Debug\SnakeGame.exe.config
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\bin\Debug\SnakeGame.exe
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\bin\Debug\SnakeGame.pdb
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\obj\Debug\SnakeGame.csproj.AssemblyReference.cache
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\obj\Debug\MainWindow.g.cs
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\obj\Debug\App.g.cs
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\obj\Debug\SnakeGame_MarkupCompile.cache
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\obj\Debug\SnakeGame_MarkupCompile.lref
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\obj\Debug\MainWindow.baml
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\obj\Debug\SnakeGame.g.resources
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\obj\Debug\SnakeGame.Properties.Resources.resources
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\obj\Debug\SnakeGame.csproj.GenerateResource.cache
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\obj\Debug\SnakeGame.csproj.CoreCompileInputs.cache
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\obj\Debug\SnakeGame.exe
+C:\Users\MUHAMMED SUWANEH\Documents\.Net\WPF\Projects\wpf-snake-game\obj\Debug\SnakeGame.pdb
