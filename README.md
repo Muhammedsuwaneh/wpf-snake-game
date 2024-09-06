@@ -35,9 +35,9 @@ continues to eat the generated food.
 - Reset
 - Quit 
 
-## Screenshots
+## Gameplay
 
-Gameplay:
+[![Watch Gameplay](Screenshots/gameplay.png)
+](Screenshots/Gameplay.mp4)
 
-![Screenshot](Screenshots/gameplay.png)
 
